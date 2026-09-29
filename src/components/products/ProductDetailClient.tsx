@@ -10,6 +10,7 @@ import type { Product, ProductVariant } from "@/types/product";
 import { useLanguage } from "@/context/LanguageContext";
 import { company } from "@/data/company";
 import { whatsappHref } from "@/lib/phone";
+import { getProductImagePath } from "@/lib/productImages";
 
 interface ProductDetailClientProps {
   product: Product;
@@ -44,6 +45,7 @@ export default function ProductDetailClient({
   ].join("\n");
 
   const whatsappQuoteUrl = whatsappHref(company.quoteWhatsapp, quoteMessage);
+  const selectedImage = getProductImagePath(selectedVariant.id);
 
   return (
     <div className="min-h-screen bg-[#07111F] py-5 text-white sm:py-10 lg:py-12">
@@ -62,15 +64,9 @@ export default function ProductDetailClient({
           {/* Left Column: Single Product Image */}
           <div className="lg:col-span-5">
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-[#07111F] sm:rounded-2xl">
-              {product.image && !product.image.includes("default-product") ? (
+              {selectedImage ? (
                 <Image
-                  src={
-                    product.image.startsWith("/") ||
-                      product.image.startsWith("http://") ||
-                      product.image.startsWith("https://")
-                      ? product.image
-                      : `/${product.image}`
-                  }
+                  src={selectedImage}
                   alt={displayTitle}
                   fill
                   priority
