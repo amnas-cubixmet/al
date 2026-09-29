@@ -6,6 +6,7 @@ import { ArrowRight, ArrowLeft, Package } from "lucide-react";
 import type { Product } from "@/types/product";
 import { useLanguage } from "@/context/LanguageContext";
 import { cn } from "@/lib/cn";
+import { getProductImagePath } from "@/lib/productImages";
 
 export default function ProductCard({
   product,
@@ -15,7 +16,9 @@ export default function ProductCard({
   className?: string;
 }) {
   const { isArabic } = useLanguage();
-  const isDefaultImage = !product.image || product.image.includes("default-product");
+  const firstVariantId = product.variants[0]?.id;
+  const mappedImage = firstVariantId ? getProductImagePath(firstVariantId) : product.image;
+  const isDefaultImage = !mappedImage || mappedImage.includes("default-product");
 
   const displayTitle = isArabic && product.titleAr ? product.titleAr : product.title;
   const displayCategory =
@@ -31,13 +34,7 @@ export default function ProductCard({
     ? "1 Variant"
     : `${product.variantCount} Sizes / Variants`;
 
-  const imageSrc =
-    product.image &&
-    !product.image.startsWith("/") &&
-    !product.image.startsWith("http://") &&
-    !product.image.startsWith("https://")
-      ? `/${product.image}`
-      : product.image;
+  const imageSrc = mappedImage;
 
   return (
     <Link
