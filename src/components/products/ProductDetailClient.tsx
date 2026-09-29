@@ -10,7 +10,6 @@ import type { Product, ProductVariant } from "@/types/product";
 import { useLanguage } from "@/context/LanguageContext";
 import { company } from "@/data/company";
 import { whatsappHref } from "@/lib/phone";
-import { getProductImagePath } from "@/lib/productImages";
 
 interface ProductDetailClientProps {
   product: Product;
@@ -45,7 +44,7 @@ export default function ProductDetailClient({
   ].join("\n");
 
   const whatsappQuoteUrl = whatsappHref(company.quoteWhatsapp, quoteMessage);
-  const selectedImage = getProductImagePath(selectedVariant.id);
+  const selectedImage = selectedVariant.image || product.image;
 
   return (
     <div className="min-h-screen bg-[#07111F] py-5 text-white sm:py-10 lg:py-12">
